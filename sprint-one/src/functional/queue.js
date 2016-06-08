@@ -14,10 +14,12 @@ var Queue = function() {
   };
 
   someInstance.dequeue = function() {
-    var store = storage[oldest];
-    delete storage[oldest];
-    oldest++;
-    return store;
+    if (oldest < key) {
+      var store = storage[oldest];
+      delete storage[oldest];
+      oldest++;
+      return store;
+    }
   };
 
   someInstance.size = function() {
