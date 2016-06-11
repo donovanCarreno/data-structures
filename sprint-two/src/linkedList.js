@@ -3,20 +3,14 @@ var LinkedList = function() {
   list.head = null;
   list.tail = null;
 
-  list.addToTail = function(value, listObj) {
+  list.addToTail = function(value) {
     // takes the value and adds to end of list
-    var store = list.head;
-
-    if (list.tail !== null) {
-      store = list.tail;
-    }
-
-    list.tail = Node(value);
-    
     if (list.head === null) {
       list.head = Node(value);
-    } else if (list.head.next === null) {
-      list.head.next = Node(value);
+      list.tail = list.head;
+    } else {
+      list.tail.next = Node(value);
+      list.tail = list.tail.next;
     }
   };
 
@@ -29,22 +23,15 @@ var LinkedList = function() {
     return store;
   };
 
-  list.contains = function(target) {
-    //will find if target is in list and return boolean
-    // return ||list.contains(target, list.head.next)
-    // listObj = listObj || list.head;
-    // console.log('val: ', listObj.value);
-    // console.log('target: ', target);
-    // console.log('list', list);
-    // // 1. check if head value === target
-    // if (listObj.value === target) {
-    //   return true;
-    // } else if (listObj.next !== null) {
-    //   return list.contains(target, listObj.next);
-    // }
-    // // 2. if not, look to next
-
-    return target === list.head.value || target === list.tail.value;
+  list.contains = function(target) {   
+    var node = list.head;
+    while (node !== null) {
+      if (node.value === target) {
+        return true;
+      }
+      node = node.next;
+    }
+    return false;
   };
 
   return list;
