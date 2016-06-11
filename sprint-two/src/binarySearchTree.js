@@ -30,9 +30,9 @@ binaryMethods.insert = function(value, node) {
 binaryMethods.contains = function(target) {
   if (target === this.value) {
     return true;
-  } else if (this.right !== undefined) {
+  } else if (this.right && target > this.value) {
     return this.right.contains(target);
-  } else if (this.left !== undefined) {
+  } else if (this.left && target < this.value) {
     return this.left.contains(target);
   } else {
     return false;
