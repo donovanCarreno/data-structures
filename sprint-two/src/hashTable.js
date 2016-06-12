@@ -1,6 +1,7 @@
 
 
 var HashTable = function() {
+  this._size = 0;
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
 };
@@ -18,7 +19,12 @@ HashTable.prototype.insert = function(k, v) {
 
   bucket.push([k, v]);
   this._storage.set(index, bucket);
-
+  this._size++;
+  if (this._size > (0.75 * this._limit)) {
+    this._limit *= 2;
+    this.reOrg();
+    //console.log(this._storage.showStorage);
+  }
 };
 
 HashTable.prototype.retrieve = function(k) {
@@ -38,7 +44,34 @@ HashTable.prototype.remove = function(k) {
   for (var i = 0; i < bucket.length; i++) {
     if (bucket[i][0] === k) {
       bucket[i].splice(i, 1);
+      this._size--;
     }
+  }
+  if (this._size < (0.25 * this._limit)) {
+   // debugger;
+    this._limit = (this._limit / 2);
+    this.reOrg();
+  }
+};
+
+HashTable.prototype.reOrg = function() {
+  var nArray = [];
+  this._storage.each(function(bucket) {
+  //  debugger;
+    if (bucket !== undefined) {
+      for (var i = 0; i < bucket.length; i++) {
+        nArray.push(bucket[i]);
+      }
+    }
+  });
+
+    console.log(this._limit);
+  this._storage = LimitedArray(this._limit);
+  this._size = 0;
+  
+  for (var i = 0; i < nArray.length; i++) {
+  //  debugger;
+    this.insert(nArray[i][0], nArray[i][1]);
   }
 };
 
